@@ -6,7 +6,7 @@ DATABASE_URL = "sqlite:///./reading_log.db"
 engine = create_engine(DATABASE_URL, echo=True)
 
 def create_db():
-    SQLModel.meteadata.create_all(engine)
+    SQLModel.metadata.create_all(engine)
 
 def get_session():
     with Session(engine) as session:
