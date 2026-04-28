@@ -4,7 +4,7 @@ from database import get_session
 from models import User, ReadingLog
 from routers.auth import get_current_user
 from pydantic import BaseModel
-from datetime import date
+from datetime import date, timedelta
 
 # Router and request schema
 router = APIRouter()
@@ -15,7 +15,7 @@ class ReadingRequest(BaseModel):
 
 # Log a reading
 @router.post("/")
-def log_reading(request: ReadingRequest, current_user: User = Depends(get_current_user), session: Session = depends(get_session)):
+def log_reading(request: ReadingRequest, current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
     reading = ReadingLog(user_id=current_user.id, passage=request.passage, date_read=request.date_read)
     session.add(reading)
     session.commit()
@@ -40,3 +40,23 @@ def delete_reading(reading_id: int, current_user: User = Depends(get_current_use
     session.commit()
     return {"message": "Reading deleted"}
 
+# Streak
+@router.get("/streak")
+def get_streak(current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
+    readings = session.exec(select(ReadingLog).where(ReadingLog.user_id == current_user.id)).all()
+    if not readings:
+        return {"streak": 0}
+    
+    read_dates = sorted(set(r.date_read for r in readings), reverse = True)
+
+    today = date.today()
+    streak = 0
+
+    for i, d in enumerate(read_dates):
+        expected = today - timedelta(days=i)
+        if d == expected:
+            streak += 1
+        else:
+            break
+
+    return {"streak": streak}

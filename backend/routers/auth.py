@@ -6,7 +6,7 @@ from passlib.context import CryptContext
 from jose import JWTError, jwt
 from pydantic import BaseModel
 from dotenv import load_dotenv
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import os
 
 # Load environment variables from .env file
@@ -46,11 +46,11 @@ def register(request: RegisterRequest, session: Session = Depends(get_session)):
 
 # Login endpoint
 @router.post("/login")
-def login(request: LoginRequest, session: Session = Depends(get_session)):
-    user = session.exec(select(User).where(User.email == request.email)).first()
+def login(form_data: OAuth2PasswordRequestForm = Depends(), session: Session = Depends(get_session)):
+    user = session.exec(select(User).where(User.email == form_data.username)).first()
     if not user:
         raise HTTPException(status_code=401, detail="Invalid email or password")
-    if not pwd_context.verify(request.password, user.hashed_password):
+    if not pwd_context.verify(form_data.password, user.hashed_password):
         raise HTTPException(status_code=401, detail="Invalid email or password")
     
     token = jwt.encode({"sub": user.email}, SECRET_KEY, algorithm=ALGORITHM)
