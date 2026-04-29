@@ -60,3 +60,9 @@ def get_streak(current_user: User = Depends(get_current_user), session: Session 
             break
 
     return {"streak": streak}
+
+# Get the reading count 
+@router.get("/count")
+def get_reading_count(current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
+    readings = session.exec(select(ReadingLog).where(ReadingLog.user_id == current_user.id)).all()
+    return {"count": len(readings)}
