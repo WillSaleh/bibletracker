@@ -66,3 +66,48 @@ def get_streak(current_user: User = Depends(get_current_user), session: Session 
 def get_reading_count(current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
     readings = session.exec(select(ReadingLog).where(ReadingLog.user_id == current_user.id)).all()
     return {"count": len(readings)}
+
+# Days read in the last week
+@router.get("/this-week")
+def get_this_week(current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
+    today = date.today()
+    start_of_week = today - timedelta(days=today.weekday())
+
+    readings = session.exec(select(ReadingLog).where(ReadingLog.user_id == current_user.id, ReadingLog.date_read >= start_of_week, ReadingLog.date_read <= today)).all()
+
+    days_read = len(set(r.date_read for r in readings))
+    return {"days_read": days_read, "total_days": 7}
+
+# Days read in the last month 
+@router.get("/this-month")
+def get_this_month(current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
+    today = date.today()
+    start_of_month = today(today.year, today.month, 1)
+
+    readings = session.exec(select(ReadingLog).where(ReadingLog.user_id == current_user.id, ReadingLog.date_read >= start_of_month)).all()
+
+    return {"count": len(readings)}
+
+# Gets the longest streak
+@router.get("/longest-streak")
+def get_longest_streak(current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
+    readings = session.exec(select(ReadingLog).where(ReadingLog.user_id == current_user.id)).all()
+
+    if not readings:
+        return {"longest_streak": 0}
+    
+    read_dates = sorted(set(r.date_read for r in readings))
+
+    longest = 1
+    current = 1
+
+    for i in range(1, len(read_dates)):
+        diff = (read_dates[i] - read_dates[i - 1]).days
+        if diff == 1:
+            current += 1
+            longest = max(longest, current)
+        else:
+            current = 1
+    
+    return {"longest_streak": longest}
+
