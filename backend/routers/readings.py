@@ -5,6 +5,7 @@ from models import User, ReadingLog
 from routers.auth import get_current_user
 from pydantic import BaseModel
 from datetime import date, timedelta
+from typing import Optional
 
 # Router and request schema
 router = APIRouter()
@@ -12,6 +13,7 @@ router = APIRouter()
 class ReadingRequest(BaseModel):
     passage: str
     date_read: date
+    notes: Optional[str] = None
 
 # Log a reading
 @router.post("/")
@@ -82,7 +84,7 @@ def get_this_week(current_user: User = Depends(get_current_user), session: Sessi
 @router.get("/this-month")
 def get_this_month(current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
     today = date.today()
-    start_of_month = today(today.year, today.month, 1)
+    start_of_month = date(today.year, today.month, 1)
 
     readings = session.exec(select(ReadingLog).where(ReadingLog.user_id == current_user.id, ReadingLog.date_read >= start_of_month)).all()
 
@@ -111,3 +113,38 @@ def get_longest_streak(current_user: User = Depends(get_current_user), session: 
     
     return {"longest_streak": longest}
 
+# Update a reading
+@router.patch("/{reading_id}")
+def update_reading(reading_id: int, request: ReadingRequest, current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
+    reading = session.get(ReadingLog, reading_id)
+    if not reading:
+        raise HTTPException(status_code=404, detail="Reading not found")
+    if reading.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Not your reading")
+    
+    reading.passage = request.passage
+    reading.date_read = request.date_read
+    session.add(reading)
+    session.commit()
+    session.refresh(reading)
+    return reading
+
+# Powers the activity chart on the history page
+@router.get("/activity")
+def get_activity(current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
+    today = date.today()
+    this_monday = today - timedelta(days=today.weekday())
+    weeks = []
+
+    for i in range(7, -1, -1):
+        week_start = this_monday - timedelta(weeks=i)
+        week_end = week_start + timedelta(days=6)
+
+        readings = session.exec(select(ReadingLog).where(ReadingLog.user_id == current_user.id, ReadingLog.date_read >= week_start, ReadingLog.date_read <= week_end)).all()
+
+        weeks.append({
+            "week": week_start.strftime("%b %d"),
+            "count": len(readings)
+        })
+
+    return weeks

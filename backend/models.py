@@ -13,3 +13,4 @@ class ReadingLog(SQLModel, table=True):
     user_id: int = Field(foreign_key="user.id")
     passage: str
     date_read: date = Field(sa_column_kwargs={"name": "date"})
+    notes: Optional[str] = None
