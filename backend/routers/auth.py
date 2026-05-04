@@ -26,6 +26,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 class RegisterRequest(BaseModel):
     email: str
     password: str
+    name: str
 
 class LoginRequest(BaseModel):
     email: str
@@ -38,7 +39,7 @@ def register(request: RegisterRequest, session: Session = Depends(get_session)):
     if existing_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     hashed_password = pwd_context.hash(request.password)
-    user = User(email=request.email, hashed_password=hashed_password)
+    user = User(email=request.email, hashed_password=hashed_password, name=request.name)
     session.add(user)
     session.commit()
     session.refresh(user)
@@ -74,4 +75,4 @@ def get_current_user(token: str = Depends(oauth2_scheme), session: Session = Dep
 # Protected endpoint to get current user info
 @router.get("/me")
 def get_me(current_user: User = Depends(get_current_user)):
-    return {"id": current_user.id, "email": current_user.email}
+    return {"id": current_user.id, "email": current_user.email, "name": current_user.name}
