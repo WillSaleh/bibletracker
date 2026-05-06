@@ -2,7 +2,7 @@
 
 from fastapi import FastAPI
 from database import create_db
-from routers import auth, readings
+from routers import auth, readings, preferences
 
 app = FastAPI()
 
@@ -12,6 +12,7 @@ def on_startup():
 
 app.include_router(auth.router, prefix="/auth", tags=["auth"])
 app.include_router(readings.router, prefix="/readings", tags=["readings"])
+app.include_router(preferences.router)
 
 @app.get("/")
 def read_root():

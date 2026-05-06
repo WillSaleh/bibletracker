@@ -15,3 +15,13 @@ class ReadingLog(SQLModel, table=True):
     passage: str
     date_read: date = Field(sa_column_kwargs={"name": "date"})
     notes: Optional[str] = None
+
+class UserPreferences(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    user_id: int = Field(foreign_key="user.id")
+    goal: str
+    experience: str
+    days_per_week: int
+    bible_version: str
+    minutes_per_day: int
+    time_of_day: str

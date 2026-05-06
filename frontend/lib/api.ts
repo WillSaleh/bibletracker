@@ -34,3 +34,22 @@ export async function getMe() {
     if (!res.ok) throw new Error('Not authenticated');
     return res.json()
 }
+
+export async function savePreferences(data: {
+    goal: string,
+    experience: string,
+    days_per_week: number,
+    minutes_per_day: number,
+    bible_version: string,
+    time_of_day: string
+}) {
+    const res = await fetch('${BASE_URL}/preferences', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${getToken()}'
+        },
+        body: JSON.stringify(data)
+    })
+    return res.json()
+}
