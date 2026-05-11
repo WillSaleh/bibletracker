@@ -1,4 +1,4 @@
-// Calls to FastAPI backend 
+// Calls to FastAPI backend
 const BASE_URL = 'http://localhost:8000';
 
 function getToken() : string | null {
@@ -6,7 +6,7 @@ function getToken() : string | null {
 }
 
 export async function register(name: string, email: string, password: string) {
-    const res = await fetch('${BASE_URL}/register', {
+    const res = await fetch(`${BASE_URL}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify ({name, email, password})
@@ -16,7 +16,7 @@ export async function register(name: string, email: string, password: string) {
 }
 
 export async function login(email: string, password: string) {
-    const res = await fetch('$(BASE_URL)/auth/login', {
+    const res = await fetch(`${BASE_URL}/auth/login`, {
         method: 'POST',
         headers: {'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({username: email, password})
@@ -28,8 +28,8 @@ export async function login(email: string, password: string) {
 }
 
 export async function getMe() {
-    const res = await fetch('${BASE_URL}/auth/me', {
-        headers: { 'Authorization': 'Bearer ${getToken()}' }
+    const res = await fetch(`${BASE_URL}/auth/me`, {
+        headers: { 'Authorization': `Bearer ${getToken()}` }
     })
     if (!res.ok) throw new Error('Not authenticated');
     return res.json()
@@ -43,11 +43,11 @@ export async function savePreferences(data: {
     bible_version: string,
     time_of_day: string
 }) {
-    const res = await fetch('${BASE_URL}/preferences', {
+    const res = await fetch(`${BASE_URL}/preferences`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ${getToken()}'
+            'Authorization': `Bearer ${getToken()}`
         },
         body: JSON.stringify(data)
     })
