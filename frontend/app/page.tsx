@@ -29,7 +29,7 @@ export default function Home() {
             await register(name, email, password)
             await login(email, password)
             router.push('/onboarding')
-        } catch (err) {
+        } catch {
             setError('Registration failed. Please try again.')
         } finally {
             setLoading(false)
@@ -42,7 +42,7 @@ export default function Home() {
         try {
             await login(loginEmail, loginPassword)
             router.push('/dashboard')
-        } catch (err) {
+        } catch {
             setError('Invalid email or password. Please try again.')
         } finally {
             setLoading(false)
@@ -51,7 +51,7 @@ export default function Home() {
 
     // UI code
     return (
-    <main className="h-screen bg-[#f5f0eb] overflow-hidden flex items-center justify-center px-6">
+    <main className="h-screen bg-[#eee6d8] overflow-hidden flex items-center justify-center px-6">
       
       <div className="w-full max-w-5xl">
       
@@ -64,7 +64,7 @@ export default function Home() {
             Track your reading. <span className="text-[#c1440e] italic">Nourish</span> your soul.
           </h1>
           <p className="text-sm text-[#5a6b5a] max-w-md mx-auto">
-            Stay consistent with God's Word and watch your faith grow — one day at a time.
+            Stay consistent with God&apos;s Word and watch your faith grow — one day at a time.
           </p>
         </div>
 
@@ -77,7 +77,7 @@ export default function Home() {
         <div className="grid grid-cols-2 gap-6 mb-4">
 
           {/* Register card */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col">
+          <div className="bg-[#fbf8f1] rounded-2xl p-6 shadow-sm flex flex-col">
             <h2 className="text-lg font-semibold text-[#1a2e1a] mb-0.5 text-center">Create your account</h2>
             <p className="text-xs text-[#5a6b5a] mb-4 text-center">Start your journey today.</p>
 
@@ -151,7 +151,7 @@ export default function Home() {
           </div>
 
           {/* Login card */}
-          <div className="bg-white rounded-2xl p-6 shadow-sm flex flex-col">
+          <div className="bg-[#fbf8f1] rounded-2xl p-6 shadow-sm flex flex-col">
             <h2 className="text-lg font-semibold text-[#1a2e1a] mb-0.5 text-center">Welcome back</h2>
             <p className="text-xs text-[#5a6b5a] mb-4 text-center">Log in to your account.</p>
 
@@ -224,9 +224,9 @@ export default function Home() {
         </div>
 
         {/* Scripture banner */}
-        <div className="bg-[#ede8e0] rounded-2xl py-5 px-8 text-center mb-4">
+        <div className="bg-[#e4dacb] rounded-2xl py-5 px-8 text-center mb-4">
           <p className="text-base text-[#1a2e1a] mb-1" style={{ fontFamily: 'var(--font-lora)', fontStyle: 'italic' }}>
-            "Your word is a lamp to my feet and a light to my path."
+            &quot;Your word is a lamp to my feet and a light to my path.&quot;
           </p>
           <p className="text-xs font-semibold tracking-widest text-[#c1440e]">PSALM 119:105</p>
         </div>
@@ -262,7 +262,7 @@ export default function Home() {
               )
             },
           ].map((item) => (
-            <div key={item.title} className="bg-white rounded-2xl p-5 text-center shadow-sm">
+            <div key={item.title} className="bg-[#fbf8f1] rounded-2xl p-5 text-center shadow-sm">
               <div className="flex justify-center mb-2">
                 <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center">
                   {item.icon}
@@ -279,5 +279,3 @@ export default function Home() {
         </main>
     )
 }
-
-

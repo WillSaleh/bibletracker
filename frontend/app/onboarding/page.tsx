@@ -92,7 +92,7 @@ export default function OnboardingPage() {
         }
       `}</style>
 
-      <div style={{ backgroundColor: '#f5f0eb' }} className="min-h-screen flex flex-col items-center justify-center p-8 overflow-hidden">
+      <div style={{ backgroundColor: '#eee6d8' }} className="min-h-screen flex flex-col items-center justify-center p-8 overflow-hidden">
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-4">
@@ -101,7 +101,7 @@ export default function OnboardingPage() {
           </div>
           <div>
             <p className="font-semibold" style={{ color: '#1a2e1a' }}>Welcome to Scripture Tracker</p>
-            <p className="text-sm" style={{ color: '#5a6b5a' }}>Let's set you up — a few quick questions to personalize your journey.</p>
+            <p className="text-sm" style={{ color: '#5a6b5a' }}>Let&apos;s set you up — a few quick questions to personalize your journey.</p>
           </div>
         </div>
 
@@ -111,7 +111,7 @@ export default function OnboardingPage() {
         {/* Card */}
         <div
           key={step}
-          className={`bg-white rounded-2xl shadow-sm p-8 w-full max-w-md ${direction === 'forward' ? 'slide-in-right' : 'slide-in-left'}`}
+          className={`bg-[#fbf8f1] rounded-2xl shadow-sm p-8 w-full max-w-md ${direction === 'forward' ? 'slide-in-right' : 'slide-in-left'}`}
         >
 
           {/* Step progress dots */}
@@ -226,7 +226,7 @@ export default function OnboardingPage() {
               <p className="text-sm mb-6" style={{ color: '#5a6b5a' }}>You can change this anytime.</p>
 
               {/* Days per week slider */}
-              <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#f5f0eb' }}>
+              <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#e4dacb' }}>
                 <div className="flex justify-between items-center mb-3">
                   <p className="text-sm font-medium" style={{ color: '#1a2e1a' }}>Days per week</p>
                   <span className="text-lg font-bold" style={{ color: '#1a2e1a' }}>{formData.days_per_week}</span>
@@ -241,7 +241,7 @@ export default function OnboardingPage() {
               </div>
 
               {/* Minutes per session slider */}
-              <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#f5f0eb' }}>
+              <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#e4dacb' }}>
                 <div className="flex justify-between items-center mb-3">
                   <p className="text-sm font-medium" style={{ color: '#1a2e1a' }}>Minutes per session</p>
                   <span className="text-lg font-bold" style={{ color: '#1a2e1a' }}>{formData.minutes_per_session}</span>
@@ -346,10 +346,10 @@ export default function OnboardingPage() {
           {step === 5 && (
             <>
               <p className="text-xs font-bold tracking-widest mb-1" style={{ color: '#c1440e' }}>STEP 5</p>
-              <h2 className="text-2xl font-extrabold mb-1" style={{ color: '#1a2e1a', fontFamily: 'Georgia, serif' }}>You're all set!</h2>
-              <p className="text-sm mb-6" style={{ color: '#5a6b5a' }}>Here's your starting plan.</p>
+              <h2 className="text-2xl font-extrabold mb-1" style={{ color: '#1a2e1a', fontFamily: 'Georgia, serif' }}>You&apos;re all set!</h2>
+              <p className="text-sm mb-6" style={{ color: '#5a6b5a' }}>Here&apos;s your starting plan.</p>
 
-              <div className="rounded-xl p-4 mb-4 flex flex-col gap-2" style={{ backgroundColor: '#f5f0eb' }}>
+              <div className="rounded-xl p-4 mb-4 flex flex-col gap-2" style={{ backgroundColor: '#e4dacb' }}>
                 <div className="flex items-center gap-2">
                   <span style={{ color: '#1a2e1a' }}>✓</span>
                   <p className="text-sm font-medium" style={{ color: '#1a2e1a' }}>{formData.days_per_week} days a week</p>

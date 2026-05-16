@@ -18,7 +18,7 @@ class ReadingRequest(BaseModel):
 # Log a reading
 @router.post("/")
 def log_reading(request: ReadingRequest, current_user: User = Depends(get_current_user), session: Session = Depends(get_session)):
-    reading = ReadingLog(user_id=current_user.id, passage=request.passage, date_read=request.date_read)
+    reading = ReadingLog(user_id=current_user.id, passage=request.passage, date_read=request.date_read, notes=request.notes)
     session.add(reading)
     session.commit()
     session.refresh(reading)
@@ -124,6 +124,7 @@ def update_reading(reading_id: int, request: ReadingRequest, current_user: User 
     
     reading.passage = request.passage
     reading.date_read = request.date_read
+    reading.notes = request.notes
     session.add(reading)
     session.commit()
     session.refresh(reading)
